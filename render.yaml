@@ -24,6 +24,11 @@ services:
         generateValue: true # Render generates a strong random secret on first deploy
       - key: AUTH_TRUST_HOST
         value: "true"
+      # REQUIRED in production: your public site URL. Without it Auth.js can fall
+      # back to http://localhost:3000 when building redirect URLs behind Render's
+      # proxy (symptom: refreshing a page bounces the browser to localhost).
+      - key: AUTH_URL
+        sync: false # e.g. https://civix-xxxx.onrender.com
       # Optional — leave unset unless you configure a real provider:
       # - key: RESEND_API_KEY
       #   sync: false

@@ -162,7 +162,12 @@ git push -u origin main
    | `MONGODB_DB` | `civix` |
    | `AUTH_SECRET` | any long random string (`node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`) |
    | `AUTH_TRUST_HOST` | `true` |
+   | `AUTH_URL` | your public site URL, e.g. `https://civix-xxxx.onrender.com` (no trailing slash) |
    | `NODE_ENV` | `production` |
+
+   > **`AUTH_URL` is required on Render.** Behind Render's proxy, Auth.js otherwise
+   > builds some redirect URLs from `http://localhost:3000` — the classic symptom is
+   > refreshing a page bouncing your browser to `localhost`, which shows nothing.
 
    > **Important:** keep the `--include=dev` flag in the build command. With
    > `NODE_ENV=production`, npm skips devDependencies by default — and Tailwind's
