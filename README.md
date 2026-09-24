@@ -200,3 +200,7 @@ it wipes and replaces the sample issues, so only force it when the database is s
 - **Logs & deploys:** every `git push` to the connected branch auto-deploys; logs are in the
   dashboard *Events* / *Logs* tabs.
 
+
+## Contributors
+
+- **Sambit Kumar Sahoo** ([@sambitsahoo089](https://github.com/sambitsahoo089)) — design, development & deployment
