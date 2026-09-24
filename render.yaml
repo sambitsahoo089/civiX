@@ -1,0 +1,33 @@
+# Render Blueprint — provisions the CiviX web service with the right build
+# command, health check, and environment variables. Deploy via
+# "New +" → "Blueprint" in the Render dashboard, or it is picked up
+# automatically when you connect the repo.
+services:
+  - type: web
+    name: civix
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # paste your MongoDB Atlas SRV connection string in the dashboard
+      - key: MONGODB_DB
+        value: civix
+      - key: AUTH_SECRET
+        generateValue: true # Render generates a strong random secret on first deploy
+      - key: AUTH_TRUST_HOST
+        value: "true"
+      # Optional — leave unset unless you configure a real provider:
+      # - key: RESEND_API_KEY
+      #   sync: false
+      # - key: ALERT_SMS_WEBHOOK_URL
+      #   sync: false
+      # - key: BLOB_READ_WRITE_TOKEN
+      #   sync: false

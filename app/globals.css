@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background-image:
+    radial-gradient(60rem 40rem at 110% -10%, rgba(16, 185, 129, 0.12), transparent 60%),
+    radial-gradient(50rem 30rem at -10% 0%, rgba(56, 189, 248, 0.12), transparent 55%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+/* ---------- motion (all optional, disabled when the user asks for less) ---------- */
+
+@keyframes siren {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes sweep {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+
+.animate-siren {
+  animation: siren 2.2s ease-in-out infinite;
+}
+
+.animate-floaty {
+  animation: floaty 6s ease-in-out infinite;
+}
+
+.animate-rise {
+  animation: rise 0.55s ease-out both;
+}
+
+.animate-rise-slow {
+  animation: rise 0.8s ease-out both;
+}
+
+/* animated gradient headline + hero wash */
+.gradient-text {
+  background-image: linear-gradient(100deg, #059669, #0ea5e9, #f59e0b, #059669);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: pan 9s linear infinite;
+}
+
+/* Static layered wash — animating a linear gradient's position leaves a visible
+   seam where the gradient band wraps, so the depth comes from radial glows. */
+.hero-wash {
+  background-color: #04211d;
+  background-image:
+    radial-gradient(38rem 28rem at 8% -12%, rgba(16, 185, 129, 0.42), transparent 62%),
+    radial-gradient(34rem 24rem at 92% 4%, rgba(56, 189, 248, 0.3), transparent 60%),
+    radial-gradient(30rem 22rem at 60% 110%, rgba(251, 191, 36, 0.14), transparent 60%),
+    linear-gradient(165deg, #032621 0%, #052e2a 48%, #0a1a2e 100%);
+}
+
+/* light sweep across the emergency strip */
+.emergency-stripe {
+  position: relative;
+  overflow: hidden;
+}
+
+.emergency-stripe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  animation: sweep 3.4s ease-in-out infinite;
+}
+
+/* ---------- surfaces ---------- */
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.card-lift {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px -18px rgba(15, 23, 42, 0.35);
+}
+
+.tap {
+  min-height: 44px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-siren,
+  .animate-floaty,
+  .animate-rise,
+  .animate-rise-slow,
+  .gradient-text,
+  .emergency-stripe::after {
+    animation: none;
+  }
+  .card-lift:hover {
+    transform: none;
+  }
+}

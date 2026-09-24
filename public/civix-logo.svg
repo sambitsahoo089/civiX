@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 132" width="420" height="132" role="img" aria-label="CiviX — Public Infrastructure Reporting">
+  <title>CiviX — Public Infrastructure Reporting</title>
+  <defs>
+    <linearGradient id="civixNavy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#215080"/>
+      <stop offset="100%" stop-color="#132c4c"/>
+    </linearGradient>
+    <linearGradient id="civixOrange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff8a2b"/>
+      <stop offset="100%" stop-color="#ea5a0c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- mark -->
+  <g transform="translate(4 4) scale(1.94)">
+    <g>
+      <rect x="3" y="27" width="58" height="10" rx="2.5" fill="url(#civixNavy)" transform="rotate(45 32 32)"/>
+      <rect x="3" y="27" width="58" height="10" rx="2.5" fill="url(#civixNavy)" transform="rotate(-45 32 32)"/>
+      <g stroke="#ffffff" stroke-width="1.8" stroke-dasharray="4.5 4.5" opacity="0.92">
+        <line x1="13" y1="32" x2="51" y2="32" transform="rotate(45 32 32)"/>
+        <line x1="13" y1="32" x2="51" y2="32" transform="rotate(-45 32 32)"/>
+      </g>
+    </g>
+    <g fill="url(#civixNavy)">
+      <circle cx="11.5" cy="11.5" r="4.6"/>
+      <circle cx="52.5" cy="11.5" r="4.6"/>
+      <circle cx="11.5" cy="52.5" r="4.6"/>
+      <circle cx="52.5" cy="52.5" r="4.6"/>
+    </g>
+    <g fill="#ffffff">
+      <circle cx="11.5" cy="11.5" r="1.9"/>
+      <circle cx="52.5" cy="11.5" r="1.9"/>
+      <circle cx="11.5" cy="52.5" r="1.9"/>
+      <circle cx="52.5" cy="52.5" r="1.9"/>
+    </g>
+    <path d="M32 4.6c-7.3 0-13.2 5.7-13.2 12.7 0 9.4 13.2 21.4 13.2 21.4s13.2-12 13.2-21.4c0-7-5.9-12.7-13.2-12.7Z" fill="url(#civixNavy)"/>
+    <circle cx="32" cy="17.3" r="5.1" fill="#ffffff"/>
+    <g stroke="url(#civixNavy)" stroke-linecap="round" fill="none">
+      <path d="M28.4 41v18" stroke-width="3.4"/>
+      <path d="M35.6 41v18" stroke-width="3.4"/>
+      <g stroke-width="2.2">
+        <path d="M28.4 45.5h7.2"/>
+        <path d="M28.4 50.5h7.2"/>
+        <path d="M28.4 55.5h7.2"/>
+      </g>
+    </g>
+    <path d="M13.5 33.5 24.5 44.5 51.5 14.5" fill="none" stroke="url(#civixOrange)" stroke-width="8.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="146" y="80" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="72" font-weight="800" letter-spacing="-1.5">
+    <tspan fill="#17395f">Civi</tspan><tspan fill="#f26a1b">X</tspan>
+  </text>
+  <text x="148" y="106" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" letter-spacing="4.1" fill="#7c8798">PUBLIC INFRASTRUCTURE REPORTING</text>
+</svg>
