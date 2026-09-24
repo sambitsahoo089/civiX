@@ -151,7 +151,7 @@ git push -u origin main
    *Configure account* → grant Render access to the repo first).
 3. Render reads `render.yaml` if you use **Blueprint**, otherwise fill in:
    - **Runtime:** Node · **Region:** closest to you
-   - **Build Command:** `npm ci && npm run build`
+   - **Build Command:** `npm ci --include=dev && npm run build`
    - **Start Command:** `npm run start`
    - **Health Check Path:** `/`
 4. **Environment variables** (the important part):
@@ -163,6 +163,13 @@ git push -u origin main
    | `AUTH_SECRET` | any long random string (`node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`) |
    | `AUTH_TRUST_HOST` | `true` |
    | `NODE_ENV` | `production` |
+
+   > **Important:** keep the `--include=dev` flag in the build command. With
+   > `NODE_ENV=production`, npm skips devDependencies by default — and Tailwind's
+   > PostCSS plugin is a devDependency, so the build fails with
+   > `Cannot find module '@tailwindcss/postcss'` without it. (Do **not** drop
+   > `NODE_ENV=production` either — the image-storage layer uses it at runtime to
+   > select GridFS.)
 
 5. **Create Web Service** — first build takes a few minutes. Your app goes live at
    `https://civix-xxxx.onrender.com`.
