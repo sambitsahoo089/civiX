@@ -50,3 +50,6 @@ next-env.d.ts
 
 # locally uploaded photos
 /public/uploads/
+
+# local-only docs
+/docs/
