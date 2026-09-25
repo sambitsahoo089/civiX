@@ -50,6 +50,7 @@ export default function AlertDispatchPanel({ issueId, category, notified = [] })
   const services = servicesForCategory(category);
 
   const [busy, setBusy] = useState(false);
+  const [resending, setResending] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
   const [localNotified, setLocalNotified] = useState(notified);
@@ -94,6 +95,31 @@ export default function AlertDispatchPanel({ issueId, category, notified = [] })
       setError("Forwarding failed. Please try again.");
     } finally {
       setBusy(false);
+    }
+  }
+
+  /** Re-send the email alert for an already-forwarded issue (no duplicate marks). */
+  async function resend() {
+    setResending(true);
+    setError("");
+    setResult(null);
+    try {
+      const res = await fetch(`/api/reports/${issueId}/forward`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resend: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || "Re-send failed. Please try again.");
+        return;
+      }
+      setResult(data);
+      router.refresh();
+    } catch {
+      setError("Re-send failed. Please try again.");
+    } finally {
+      setResending(false);
     }
   }
 
@@ -201,15 +227,26 @@ export default function AlertDispatchPanel({ issueId, category, notified = [] })
       )}
 
       {result?.alreadyForwarded && (
-        <p className="border-t border-sky-100 bg-sky-50 px-5 py-3 text-xs font-medium text-sky-800">
-          {result.message}
-        </p>
+        <div className="space-y-3 border-t border-sky-100 bg-sky-50 px-5 py-4">
+          <p className="text-xs font-medium text-sky-800">{result.message}</p>
+          <button
+            type="button"
+            onClick={resend}
+            disabled={resending}
+            className="inline-flex items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-sky-700 active:scale-[0.98] disabled:opacity-60"
+          >
+            <MailIcon className="h-4 w-4" />
+            {resending ? "Re-sending…" : "Resend alert email"}
+          </button>
+        </div>
       )}
 
-      {result && !result.alreadyForwarded && (
+      {(result?.resent || result?.ok) && !result?.alreadyForwarded && (
         <div className="space-y-3 border-t border-emerald-100 bg-emerald-50/60 px-5 py-4">
           <p className="text-xs font-semibold text-emerald-800">
-            Forwarded to {result.services?.join(", ")} — alert recorded.
+            {result.resent
+              ? `Alert email re-sent for ${result.services?.join(", ")}.`
+              : `Forwarded to ${result.services?.join(", ")} — alert recorded.`}
           </p>
           <div className="flex flex-wrap gap-3 text-xs text-slate-700">
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 ring-1 ring-slate-200">
