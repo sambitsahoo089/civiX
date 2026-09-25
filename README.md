@@ -43,8 +43,8 @@ Demo accounts:
 
 | Role | Email | Password |
 |---|---|---|
-| Authority | `authority@city.gov` | `admin123` |
-| Citizen | `citizen@example.com` | `password123` |
+| Authority | `sambitkusahoo089@gmail.com` | `authority123` |
+| Citizen (demo) | `citizen@example.com` | `password123` |
 
 ## Issue categories
 
