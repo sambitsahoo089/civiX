@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { AlertLog, Issue } from "@/lib/models";
+import { alertBody } from "@/lib/services";
 import { categoryMeta, isEmergencyCategory, servicesForCategory } from "@/lib/categories";
 import { HELPLINE_EMAIL, HELPLINE_PHONE, SERVICE_KEYS, serviceMeta } from "@/lib/services";
+import { sendHelplineEmail } from "@/lib/alerts";
 
 /**
  * Marks emergency services as "already informed" for an issue.
@@ -67,6 +69,24 @@ export async function POST(request, { params }) {
       );
       await issue.save();
 
+      // The citizen/authority dialled the helpline directly; also send the email
+      // copy with the full report so the responder has the details in writing.
+      const servicesLabel = fresh
+        .map((key) => serviceMeta(key)?.label || key)
+        .join(", ");
+      const email = await sendHelplineEmail({
+        subject: `EMERGENCY CALL LOGGED — ${categoryMeta(issue.category).label} (#${issue._id
+          .toString()
+          .slice(-6)
+          .toUpperCase()})`,
+        text: `${method === "CALL" ? "Call placed to" : "Forwarded to"} ${servicesLabel} by ${
+          isAuthority ? "the municipal authority" : "the reporting citizen"
+        }\n\n${alertBody(issue, {
+          source: isAuthority ? "AUTHORITY" : "CITIZEN",
+          services: fresh,
+        })}`,
+      });
+
       await AlertLog.create({
         issue: issue._id,
         kind: isAuthority ? "AUTHORITY_FORWARD" : "CITIZEN_CALL",
@@ -80,15 +100,12 @@ export async function POST(request, { params }) {
             status: "SKIPPED",
             detail: `Dialled directly by ${isAuthority ? "authority" : "citizen"} — ${HELPLINE_PHONE}`,
           },
-          {
-            channel: "EMAIL",
-            status: "SKIPPED",
-            detail: `Call logged, email copy available at ${HELPLINE_EMAIL}`,
-          },
+          email,
         ],
-        message: `${(method === "CALL" ? "Call placed to" : "Forwarded to")} ${fresh
-          .map((key) => serviceMeta(key)?.label || key)
-          .join(", ")} for issue #${issue._id.toString().slice(-6).toUpperCase()}`,
+        message: `${method === "CALL" ? "Call placed to" : "Forwarded to"} ${servicesLabel} for issue #${issue._id
+          .toString()
+          .slice(-6)
+          .toUpperCase()}`,
         createdBy: session.user.id,
       });
     }

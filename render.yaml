@@ -29,9 +29,16 @@ services:
       # proxy (symptom: refreshing a page bounces the browser to localhost).
       - key: AUTH_URL
         sync: false # e.g. https://civix-xxxx.onrender.com
-      # Optional — leave unset unless you configure a real provider:
-      # - key: RESEND_API_KEY
-      #   sync: false
+      # Email delivery for emergency alerts — Gmail App Password works:
+      # https://myaccount.google.com/apppasswords (2FA required on the account)
+      # - key: SMTP_USER
+      #   sync: false # e.g. comedydedanadan089@gmail.com
+      # - key: SMTP_PASS
+      #   sync: false # 16-character App Password, not the login password
+      # Optional overrides:
+      # - key: ALERT_EMAIL_TO
+      #   sync: false # defaults to the helpline email
+      # Optional SMS gateway webhook:
       # - key: ALERT_SMS_WEBHOOK_URL
       #   sync: false
       # - key: BLOB_READ_WRITE_TOKEN

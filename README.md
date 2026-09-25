@@ -80,13 +80,16 @@ Helpline (Phase 1, shared by all three services):
 - Phone **8895465904**
 - Email **comedydedanadan089@gmail.com**
 
-Change them per service in `lib/services.js`. Delivery is pluggable in `lib/alerts.js`:
+Change them per service in `lib/services.js`. Email delivery is real once SMTP is configured in `lib/alerts.js`:
 
-- `RESEND_API_KEY` → sends the alert email through Resend
+- `SMTP_USER` + `SMTP_PASS` → sends the alert email via SMTP. For Gmail, `SMTP_PASS`
+  must be an **App Password** (needs 2FA on the account): https://myaccount.google.com/apppasswords
+- `SMTP_HOST` / `SMTP_PORT` → optional, default `smtp.gmail.com:465`
+- `ALERT_EMAIL_TO` → optional recipient override (defaults to the helpline email)
 - `ALERT_SMS_WEBHOOK_URL` → POSTs `{ to, text }` to your SMS gateway
 
-Without a provider the alert is still fully recorded (recipients, message, per-channel status)
-so nothing is silently lost, and the UI reports the channel as `SKIPPED`.
+Without SMTP credentials the alert is still fully recorded (recipients, message, per-channel status)
+so nothing is silently lost, and the UI reports the email channel as `SKIPPED`.
 
 ## API
 
