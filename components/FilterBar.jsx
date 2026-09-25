@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { CATEGORIES, CATEGORY_KEYS } from "@/lib/categories";
 import { STATUSES } from "@/lib/status";
-import { AlertIcon } from "@/components/ServiceIcons";
+import { AlertIcon, DownloadIcon } from "@/components/ServiceIcons";
 
 export default function FilterBar() {
   const router = useRouter();
@@ -19,6 +19,9 @@ export default function FilterBar() {
   const emergencyOnly = searchParams.get("emergency") === "1";
   const hasFilters =
     Boolean(searchParams.get("status") || searchParams.get("category")) || emergencyOnly;
+
+  // Export the current (filtered) view to an Excel-friendly CSV.
+  const exportHref = `/api/reports/export?${searchParams.toString()}`;
 
   const selectClass =
     "tap min-w-[10rem] flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none sm:flex-none";
@@ -66,6 +69,16 @@ export default function FilterBar() {
         <AlertIcon className="h-4 w-4" />
         Emergencies only
       </button>
+
+      <a
+        href={exportHref}
+        download
+        className="tap inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+        title="Download all reports in the current view as an Excel-compatible file"
+      >
+        <DownloadIcon className="h-4 w-4" />
+        Export to Excel
+      </a>
 
       {hasFilters && (
         <button

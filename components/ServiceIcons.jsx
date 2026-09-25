@@ -56,6 +56,16 @@ export function PhoneIcon({ className = "h-4 w-4" }) {
   );
 }
 
+export function DownloadIcon({ className = "h-4 w-4" }) {
+  return (
+    <svg {...BASE} className={className} aria-hidden="true">
+      <path d="M12 3v11" />
+      <path d="M7.5 10.5L12 15l4.5-4.5" />
+      <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+    </svg>
+  );
+}
+
 export function MailIcon({ className = "h-4 w-4" }) {
   return (
     <svg {...BASE} className={className} aria-hidden="true">
