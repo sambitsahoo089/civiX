@@ -35,7 +35,7 @@ Out of scope for Phase 1: native mobile apps, AI damage detection, public heatma
 npm install
 cp .env.example .env          # .env already exists in this checkout
 npm run db:start              # real mongod on mongodb://127.0.0.1:5434
-npm run db:seed               # demo accounts + 9 sample issues (3 emergencies)
+npm run db:seed               # creates the two sign-in accounts (no sample data)
 npm run dev                   # http://localhost:3000
 ```
 
@@ -98,7 +98,8 @@ so nothing is silently lost, and the UI reports the email channel as `SKIPPED`.
 | `POST /api/reports` | citizen | Create a report (multipart: category, description, photo, coordinates, `notifiedServices`) |
 | `POST /api/reports/[id]/status` | authority | Move an issue through the workflow with a note |
 | `POST /api/reports/[id]/notify` | citizen (owner) / authority | Record that a service was informed by phone |
-| `POST /api/reports/[id]/forward` | authority | Forward the report to all emergency services (phone + email) |
+| `POST /api/reports/[id]/forward` | authority | Forward the report to all emergency services (phone + email); `{ resend: true }` re-sends the email without duplicating marks |
+| `GET /api/reports/export` | authority | Download all (or filtered) reports as an Excel-friendly CSV with name, id, problem, address and lat/lng |
 | `POST /api/register` | public | Citizen self-registration |
 | `GET /api/files/[id]` | public | Streams images uploaded to GridFS (production storage) |
 
@@ -114,10 +115,12 @@ so nothing is silently lost, and the UI reports the email channel as `SKIPPED`.
 - **Emergency surfaces** are visually distinct (red gradients, pulsing siren) so they cannot be
   mistaken for routine civic reports.
 
-## KPIs
+## KPIs & export
 
 The dashboard tracks open vs resolved vs rejected counts, total reports, emergency volume and
-the number of emergencies still awaiting helpline dispatch.
+the number of emergencies still awaiting helpline dispatch. The **Export to Excel** button
+downloads the current (filtered) view as a CSV with citizen name, issue id, problem, address
+and exact latitude/longitude for offline analysis.
 
 ## Deployment (Render + MongoDB Atlas)
 
@@ -182,16 +185,18 @@ git push -u origin main
 5. **Create Web Service** — first build takes a few minutes. Your app goes live at
    `https://civix-xxxx.onrender.com`.
 
-### 4. Seed demo data into Atlas (optional)
+### 4. Create the sign-in accounts in Atlas
 
 From your machine, pointing at the production cluster:
 
 ```bash
-MONGODB_URI="mongodb+srv://..." MONGODB_DB=civix npm run db:seed
+MONGODB_URI="mongodb+srv://..." MONGODB_DB=civix SEED_FORCE=true npm run db:seed
 ```
 
-The seed refuses to run against a production database unless you pass `SEED_FORCE=true` —
-it wipes and replaces the sample issues, so only force it when the database is still empty.
+This **wipes everything** (users, reports, alert logs, history) and recreates just the two
+sign-in accounts — the authority and an untouched demo citizen. It refuses to run against a
+production database unless you pass `SEED_FORCE=true`, so only run it when you really mean
+to reset. Citizens can otherwise self-register at `/register`.
 
 ### 5. Notes for the Render free plan
 
